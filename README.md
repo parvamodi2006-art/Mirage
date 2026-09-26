@@ -382,3 +382,21 @@ Do not deploy or use the project against systems or networks without proper auth
 ---
 
 ⭐ If you find Mirage useful, consider giving the repository a star.
+
+## 📸 Dashboard Preview
+
+### Overview
+
+![Mirage Overview](screenshots/overview.png)
+
+### Session Intelligence
+
+![Mirage Session Intelligence](screenshots/session-intelligence.png)
+
+### Live Telemetry
+
+![Mirage Live Telemetry](screenshots/live-telemetry.png)
+
+### Attack Replay
+
+![Mirage Attack Replay](screenshots/attack-replay.png)
