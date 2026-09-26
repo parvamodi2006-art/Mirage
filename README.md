@@ -156,6 +156,116 @@ The React dashboard provides dedicated views for:
 
 ---
 
+## ⚡ Quick Demo / How It Works
+
+Mirage follows a simple security telemetry pipeline:
+
+```text
+┌──────────────────────┐
+│  Honeypot Listener   │
+│      TCP :2222       │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│ Attacker Interaction │
+│ Login + Commands     │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│      Telemetry       │
+│ Events + Sessions    │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│  Behavior Analysis   │
+│ Discovery / Creds /  │
+│ Privilege / Execution│
+└──────────┬───────────┘
+           │
+           ├─────────────────┐
+           ▼                 ▼
+┌──────────────────┐  ┌──────────────────┐
+│ MITRE ATT&CK     │  │   Risk Engine    │
+│ Technique Mapping│  │ Score + Severity │
+└────────┬─────────┘  └────────┬─────────┘
+         │                     │
+         └──────────┬──────────┘
+                    ▼
+         ┌──────────────────────┐
+         │ Session Intelligence │
+         │ Attack Progression   │
+         │ + Attack Replay      │
+         └──────────┬───────────┘
+                    │
+                    ▼
+         ┌──────────────────────┐
+         │   React Dashboard    │
+         │ Live Security View   │
+         └──────────────────────┘
+```
+
+### Example Attack Flow
+
+A controlled test session can produce activity such as:
+
+```text
+Login Attempt
+     ↓
+whoami
+     ↓
+ifconfig
+     ↓
+cat /etc/passwd
+     ↓
+sudo -l
+     ↓
+bash
+```
+
+Mirage analyzes each event and converts the observed activity into security intelligence:
+
+```text
+Command
+   ↓
+Behavior Category
+   ↓
+Risk Score + Severity
+   ↓
+MITRE ATT&CK Technique
+   ↓
+Attack Stage
+   ↓
+Session Risk
+   ↓
+Replayable Timeline
+```
+
+### Example Session Result
+
+```text
+Session Risk     : 96
+Threat Level     : CRITICAL
+Events           : 6
+Attack Stages    : 5
+MITRE Techniques : 5
+
+Initial Access
+      ↓
+Discovery
+      ↓
+Credential Access
+      ↓
+Privilege Escalation
+      ↓
+Execution
+```
+
+This allows analysts to move from **raw honeypot activity → structured security intelligence** through a single workflow.
+
+
 ## 🏗️ Architecture
 
 ```text
