@@ -1,428 +1,384 @@
-# \# 🛡️ Mirage — Adaptive Defensive Honeypot
+# 🛡️ Mirage — Adaptive Defensive Honeypot
 
-# 
+**A controlled defensive honeypot for security research, attack behavior analysis, session intelligence, and MITRE ATT&CK mapping.**
 
-# > \*\*A controlled defensive honeypot for security research, attack behavior analysis, session intelligence, and MITRE ATT\&CK mapping.\*\*
+Mirage is a cybersecurity research project designed to simulate a controlled server environment and observe suspicious interaction patterns in an isolated lab.
 
-# 
+It captures attacker-like activity, analyzes commands and behaviors, maps observed techniques to MITRE ATT&CK, calculates session risk, tracks attack progression, and provides an interactive security dashboard.
 
-# Mirage is a cybersecurity research project designed to simulate a controlled server environment and observe suspicious interaction patterns in an isolated lab.
+---
 
-# 
+## ✨ Features
 
-# It captures attacker-like activity, analyzes commands and behaviors, maps observed techniques to \*\*MITRE ATT\&CK\*\*, calculates session risk, tracks attack progression, and provides an interactive dashboard for security analysis.
+* 🍯 Controlled TCP-based honeypot
+* 🧠 Behavioral command analysis
+* 🎯 MITRE ATT&CK technique mapping
+* 📊 Session risk scoring
+* 🚨 Severity classification
+* 🧭 Attack progression tracking
+* ⏱️ Attack session replay
+* 📡 Real-time telemetry
+* 🖥️ React security dashboard
+* 💾 Persistent event and session storage
 
-# 
+---
 
-# \---
+## 🧠 Behavior Analysis
 
-# 
+Mirage analyzes observed commands and categorizes them into security-relevant behaviors.
 
-# \## 🎯 What is Mirage?
+| Behavior                | Example           | Risk |
+| ----------------------- | ----------------- | ---: |
+| Authentication Activity | Login attempt     |   30 |
+| System Discovery        | `whoami`          |   60 |
+| Network Discovery       | `ifconfig`        |   60 |
+| File Discovery          | `ls`              |   50 |
+| Credential Access       | `cat /etc/passwd` |   80 |
+| Privilege Escalation    | `sudo -l`         |   80 |
+| Execution               | `bash`            |   60 |
+| Command Execution       | Unknown commands  |   40 |
 
-# 
+Risk values are part of the current Mirage detection model and are not intended to represent a universal threat score.
 
-# Traditional honeypots primarily focus on collecting logs.
+---
 
-# 
+## 🎯 MITRE ATT&CK Mapping
 
-# \*\*Mirage goes one step further by turning those interactions into security intelligence.\*\*
+Mirage maps detected behaviors to relevant MITRE ATT&CK techniques.
 
-# 
+| Behavior             | Technique | Tactic               |
+| -------------------- | --------- | -------------------- |
+| System Discovery     | T1033     | Discovery            |
+| Network Discovery    | T1049     | Discovery            |
+| File Discovery       | T1083     | Discovery            |
+| Credential Access    | T1552     | Credential Access    |
+| Privilege Escalation | T1548     | Privilege Escalation |
+| Command Execution    | T1059     | Execution            |
+
+---
+
+## 📊 Session Intelligence
+
+Mirage calculates a session-level risk score using:
+
+* Highest observed event risk
+* Average event risk
+* Behavioral diversity
+* High-risk activity
+* Critical activity
+
+Example:
+
+```text
+Session Risk    : 96
+Threat Level    : CRITICAL
+Events          : 6
+Attack Stages   : 5
+MITRE Techniques: 5
+```
+
+---
+
+## 🧭 Attack Progression
+
+Observed activity can be represented as a progression:
+
+```text
+Initial Access
+      ↓
+Discovery
+      ↓
+Credential Access
+      ↓
+Privilege Escalation
+      ↓
+Execution
+```
+
+This provides an analyst-friendly view of how activity developed during a session.
+
+---
+
+## ⏱️ Attack Replay
+
+Mirage can reconstruct a session as a chronological timeline containing:
+
+* Event sequence
+* Timestamp
+* Relative time
+* Username
+* Command
+* Behavior category
+* Risk score
+* Severity
+* MITRE technique
+* MITRE tactic
+* Event description
+
+---
+
+## 🖥️ Security Dashboard
+
+The React dashboard provides dedicated views for:
+
+* Overview
+* Attack Sessions
+* Session Intelligence
+* Live Telemetry
+* MITRE ATT&CK
+* Attack Replay
+* Honeypots
+* Event Store
+
+---
+
+## 🏗️ Architecture
+
+```text
+                    ┌─────────────────────┐
+                    │   Lab Interaction  │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │  Mirage Honeypot   │
+                    │    TCP :2222       │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │     Telemetry      │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              ▼                ▼                ▼
+        ┌───────────┐    ┌───────────┐    ┌───────────┐
+        │ Behavior  │    │   MITRE   │    │    Risk   │
+        │  Engine   │    │  Mapper   │    │   Engine  │
+        └─────┬─────┘    └─────┬─────┘    └─────┬─────┘
+              │                │                │
+              └────────────────┼────────────────┘
+                               ▼
+                    ┌─────────────────────┐
+                    │ Session Intelligence│
+                    │  & Attack Replay    │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │    FastAPI API      │
+                    │       :8000         │
+                    └──────────┬──────────┘
+                               │
+                               ▼
+                    ┌─────────────────────┐
+                    │   React Dashboard   │
+                    │       :5173         │
+                    └─────────────────────┘
+```
+
+---
+
+## 🛠️ Tech Stack
+
+**Backend**
+
+* Python
+* FastAPI
+* Uvicorn
+* SQLAlchemy
+* SQLite
+* AsyncIO
+
+**Frontend**
+
+* React
+* Vite
+* JavaScript
+* Lucide React
+
+**Security**
+
+* Behavioral analysis
+* Risk scoring
+* MITRE ATT&CK mapping
+* Attack progression
+* Session intelligence
+* Attack replay
+
+---
+
+## 📁 Project Structure
+
+```text
+Mirage/
+├── backend/
+│   └── app/
+│       ├── attack/
+│       ├── behavior/
+│       ├── honeypot/
+│       ├── telemetry/
+│       └── main.py
+│
+├── dashboard/
+│   └── src/
+│       ├── App.jsx
+│       ├── api.js
+│       └── ...
+│
+├── .gitignore
+└── README.md
+```
+
+---
+
+## 🚀 Local Setup
 
-# A captured command can be analyzed for:
+### Clone
+
+```bash
+git clone https://github.com/parvamodi2006-art/Mirage.git
+cd Mirage
+```
+
+### Backend
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn backend.app.main:app --reload --port 8000
+```
+
+Backend:
+
+`http://127.0.0.1:8000`
+
+API documentation:
+
+`http://127.0.0.1:8000/docs`
+
+### Dashboard
+
+Open another terminal:
+
+```cmd
+cd dashboard
+npm install
+npm run dev
+```
+
+Dashboard:
+
+`http://localhost:5173`
+
+---
 
-# 
+## 🍯 Honeypot
 
-# \* Behavior category
+The current Mirage honeypot listens on:
 
-# \* Risk score
+```text
+127.0.0.1:2222
+```
 
-# \* Severity
+The current implementation is a controlled plain TCP line-based honeypot and does not implement the real SSH protocol.
 
-# \* MITRE ATT\&CK technique
+---
 
-# \* MITRE tactic
+## 📡 API
 
-# \* Attack stage
+### Health
 
-# \* Session-level threat level
+```text
+GET /
+GET /health
+```
 
-# 
+### Sessions
 
-# This allows analysts to understand not only \*\*what happened\*\*, but also how an observed session progressed.
+```text
+POST /api/telemetry/session
+GET  /api/telemetry/sessions
+GET  /api/telemetry/sessions/{session_id}
+GET  /api/telemetry/sessions/{session_id}/replay
+```
 
-# 
+### Events
 
-# \---
+```text
+POST /api/telemetry/event
+GET  /api/telemetry/events
+```
 
-# 
+---
 
-# \## ⚡ Core Capabilities
+## 🔐 Security Considerations
 
-# 
+Mirage is intended for controlled security research and authorized laboratory environments.
 
-# \### 🍯 Controlled Honeypot
+When experimenting with a honeypot:
 
-# 
+* Use an isolated VM or container.
+* Never expose real credentials.
+* Never connect simulated services to production systems.
+* Do not provide access to the real host filesystem.
+* Monitor only systems and traffic you are authorized to test.
 
-# Mirage provides a controlled TCP-based honeypot environment that simulates a shell-like service.
+The current implementation should be treated as a research/lab honeypot rather than a production internet-facing deception platform.
 
-# 
+---
 
-# It can:
+## 🗺️ Roadmap
 
-# 
+### Completed
 
-# \* Accept connection attempts
+* [x] Honeypot listener
+* [x] Session tracking
+* [x] Event telemetry
+* [x] Behavioral analysis
+* [x] Risk scoring
+* [x] MITRE ATT&CK mapping
+* [x] Attack progression
+* [x] Attack replay
+* [x] React dashboard
 
-# \* Simulate authentication
+### Planned
 
-# \* Provide a fake shell prompt
+* [ ] Adaptive deception
+* [ ] HTTP honeypot
+* [ ] Multi-session correlation
+* [ ] Fake credentials and files
+* [ ] Threat intelligence enrichment
+* [ ] Automated security reports
+* [ ] Attacker fingerprinting
+* [ ] Containerized deployment
+* [ ] Public demonstration environment
 
-# \* Accept commands
+---
 
-# \* Generate telemetry
+## 👨‍💻 Author
 
-# \* Keep the interaction isolated from the real host
+**Parva Modi**
 
-# 
+Cybersecurity Student / Trainee
 
-# > \*\*Note:\*\* The current SSH component is a controlled plain TCP honeypot and does not implement the real SSH protocol.
+Focus areas:
 
-# 
+* Penetration Testing
+* VAPT
+* SOC Operations
+* Threat Detection
+* Security Engineering
 
-# \---
+---
 
-# 
+## ⚠️ Disclaimer
 
-# \### 🧠 Behavioral Analysis
+Mirage is intended for authorized security research, education, and controlled laboratory environments only.
 
-# 
+Do not deploy or use the project against systems or networks without proper authorization.
 
-# Commands are analyzed by the Mirage behavior engine and classified into security-relevant categories.
+---
 
-# 
-
-# Current behavior categories include:
-
-# 
-
-# | Behavior                | Example           | Risk |
-
-# | ----------------------- | ----------------- | ---: |
-
-# | Authentication Activity | Login attempt     |   30 |
-
-# | System Discovery        | `whoami`          |   60 |
-
-# | Network Discovery       | `ifconfig`        |   60 |
-
-# | File Discovery          | `ls`              |   50 |
-
-# | Credential Access       | `cat /etc/passwd` |   80 |
-
-# | Privilege Escalation    | `sudo -l`         |   80 |
-
-# | Execution               | `bash`            |   60 |
-
-# | Command Execution       | Unknown commands  |   40 |
-
-# 
-
-# Risk values are part of the current project detection model and are not intended to represent a universal threat score.
-
-# 
-
-# \---
-
-# 
-
-# \## 🎯 MITRE ATT\&CK Mapping
-
-# 
-
-# Mirage maps detected behavior to relevant MITRE ATT\&CK techniques.
-
-# 
-
-# | Behavior             | Technique                                    | Tactic               |
-
-# | -------------------- | -------------------------------------------- | -------------------- |
-
-# | System Discovery     | T1033 — System Owner/User Discovery          | Discovery            |
-
-# | Network Discovery    | T1049 — System Network Connections Discovery | Discovery            |
-
-# | File Discovery       | T1083 — File and Directory Discovery         | Discovery            |
-
-# | Credential Access    | T1552 — Unsecured Credentials                | Credential Access    |
-
-# | Privilege Escalation | T1548 — Abuse Elevation Control Mechanism    | Privilege Escalation |
-
-# | Command Execution    | T1059 — Command and Scripting Interpreter    | Execution            |
-
-# 
-
-# This mapping helps transform raw honeypot telemetry into an ATT\&CK-oriented attack narrative.
-
-# 
-
-# \---
-
-# 
-
-# \## 📊 Session Risk Intelligence
-
-# 
-
-# Mirage calculates a session-level risk score using multiple signals including:
-
-# 
-
-# \* Highest observed event risk
-
-# \* Average event risk
-
-# \* Behavioral diversity
-
-# \* High-risk activity
-
-# \* Critical activity
-
-# 
-
-# The session is then assigned a threat level:
-
-# 
-
-# ```text
-
-# LOW
-
-# MEDIUM
-
-# HIGH
-
-# CRITICAL
-
-# ```
-
-# 
-
-# Example:
-
-# 
-
-# ```text
-
-# Session Risk: 96
-
-# Threat Level: CRITICAL
-
-# ```
-
-# 
-
-# \---
-
-# 
-
-# \## 🧭 Attack Progression
-
-# 
-
-# Mirage tracks the progression of observed activity across security stages.
-
-# 
-
-# Example attack progression:
-
-# 
-
-# ```text
-
-# Initial Access
-
-# &#x20;     ↓
-
-# Discovery
-
-# &#x20;     ↓
-
-# Credential Access
-
-# &#x20;     ↓
-
-# Privilege Escalation
-
-# &#x20;     ↓
-
-# Execution
-
-# ```
-
-# 
-
-# This provides a higher-level view of how activity evolved during a session.
-
-# 
-
-# \---
-
-# 
-
-# \## ⏱️ Attack Replay
-
-# 
-
-# Every tracked session can be reconstructed as a chronological timeline.
-
-# 
-
-# Replay data includes:
-
-# 
-
-# \* Event sequence
-
-# \* Timestamp
-
-# \* Relative time
-
-# \* Username
-
-# \* Command
-
-# \* Behavior category
-
-# \* Risk score
-
-# \* Severity
-
-# \* MITRE technique
-
-# \* MITRE tactic
-
-# \* Event description
-
-# 
-
-# This makes it possible to reconstruct an observed interaction without manually reading raw logs.
-
-# 
-
-# \---
-
-# 
-
-# \## 🖥️ Security Dashboard
-
-# 
-
-# Mirage includes a React-based security dashboard for investigating telemetry.
-
-# 
-
-# \### Dashboard sections
-
-# 
-
-# \* \*\*Overview\*\*
-
-# \* \*\*Attack Sessions\*\*
-
-# \* \*\*Session Intelligence\*\*
-
-# \* \*\*Live Telemetry\*\*
-
-# \* \*\*MITRE ATT\&CK\*\*
-
-# \* \*\*Attack Replay\*\*
-
-# \* \*\*Honeypots\*\*
-
-# \* \*\*Event Store\*\*
-
-# 
-
-# The dashboard communicates with the FastAPI backend and periodically refreshes session and event telemetry.
-
-# 
-
-# \---
-
-# 
-
-# \## 🏗️ Architecture
-
-# 
-
-# ```text
-
-# &#x20;                   ┌──────────────────────┐
-
-# &#x20;                   │   Honeypot Client    │
-
-# &#x20;                   │   / Lab Interaction  │
-
-# &#x20;                   └──────────┬───────────┘
-
-# &#x20;                              │
-
-# &#x20;                              ▼
-
-# &#x20;                   ┌──────────────────────┐
-
-# &#x20;                   │   Mirage Honeypot    │
-
-# &#x20;                   │    TCP Listener      │
-
-# &#x20;                   │      :2222           │
-
-# &#x20;                   └──────────┬───────────┘
-
-# &#x20;                              │
-
-# &#x20;                              ▼
-
-# &#x20;                   ┌──────────────────────┐
-
-# &#x20;                   │      Telemetry       │
-
-# &#x20;                   │       Engine         │
-
-# &#x20;                   └──────────┬───────────┘
-
-# &#x20;                              │
-
-# &#x20;             ┌────────────────┼────────────────┐
-
-# &#x20;             ▼                ▼                ▼
-
-# &#x20;      ┌────────────┐   ┌─────────────┐   ┌──────────────┐
-
-# &#x20;      │  Behavior  │   │    MITRE    │   │     Risk     │
-
-# &#x20;      │  Analysis  │   │   Mapping   │   │    Engine    │
-
-# &#x20;      └─────┬──────┘   └──────┬──────┘   └──────┬───────┘
-
-# &#x20;            │                 │                 │
-
-# &#x20;            └─────────────────┼─────────────────┘
-
-# &#x20;                              ▼
-
-# &#x20;                   ┌──────────────────────┐
-
-# &#x20;                   │   Session Intelligence│
-
-# &#x20;                   │  Attack Progression  │
-
-# &#x20;                   │    \& Atta
-
-# ```
-
-
-
+⭐ If you find Mirage useful, consider giving the repository a star.
