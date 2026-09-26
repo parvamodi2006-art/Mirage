@@ -56,6 +56,51 @@ class TelemetryClient:
 
             return None
 
+    async def close_session(
+        self,
+        session_id: str,
+    ) -> bool:
+
+        return await asyncio.to_thread(
+            self._close_session,
+            session_id,
+        )
+
+    def _close_session(
+        self,
+        session_id: str,
+    ) -> bool:
+
+        try:
+
+            response = requests.post(
+                f"{self.base_url}"
+                f"/api/telemetry/session/"
+                f"{session_id}/close",
+                timeout=5,
+            )
+
+            response.raise_for_status()
+
+            result = response.json()
+
+            print(
+                "[Telemetry] "
+                f"Session closed | "
+                f"{result.get('session_id')}"
+            )
+
+            return True
+
+        except requests.RequestException as exc:
+
+            print(
+                "[Telemetry] "
+                f"Session close failed: {exc}"
+            )
+
+            return False
+
     async def send_event(
         self,
         session_id: str,

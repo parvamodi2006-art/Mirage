@@ -4,32 +4,58 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 
-DATA_DIR = os.path.join(
-    os.path.dirname(
-        os.path.dirname(
-            os.path.dirname(__file__)
+DATABASE_URL = os.getenv(
+    "DATABASE_URL"
+)
+
+
+if DATABASE_URL:
+
+    if DATABASE_URL.startswith(
+        "postgres://"
+    ):
+        DATABASE_URL = DATABASE_URL.replace(
+            "postgres://",
+            "postgresql://",
+            1,
         )
-    ),
-    "data",
-)
 
-os.makedirs(DATA_DIR, exist_ok=True)
+    engine = create_engine(
+        DATABASE_URL,
+        pool_pre_ping=True,
+    )
 
+else:
 
-DATABASE_PATH = os.path.join(
-    DATA_DIR,
-    "mirage.db",
-)
+    DATA_DIR = os.path.join(
+        os.path.dirname(
+            os.path.dirname(
+                os.path.dirname(__file__)
+            )
+        ),
+        "data",
+    )
 
-DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
+    os.makedirs(
+        DATA_DIR,
+        exist_ok=True,
+    )
 
+    DATABASE_PATH = os.path.join(
+        DATA_DIR,
+        "mirage.db",
+    )
 
-engine = create_engine(
-    DATABASE_URL,
-    connect_args={
-        "check_same_thread": False,
-    },
-)
+    DATABASE_URL = (
+        f"sqlite:///{DATABASE_PATH}"
+    )
+
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args={
+            "check_same_thread": False,
+        },
+    )
 
 
 SessionLocal = sessionmaker(

@@ -227,6 +227,19 @@ class MirageSSHServer:
                 f"{session.command_count}"
             )
 
+            try:
+
+                await self.telemetry.close_session(
+                    session.session_id
+                )
+
+            except Exception as exc:
+
+                print(
+                    "[Mirage SSH] "
+                    f"Session close telemetry error: {exc}"
+                )
+
             writer.close()
 
             try:

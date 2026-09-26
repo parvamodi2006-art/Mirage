@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -66,6 +67,51 @@ def create_session(
         "source_ip": source_ip,
         "service": service,
         "session_status": "active",
+    }
+
+
+# ============================================================
+# CLOSE ATTACK SESSION
+# ============================================================
+
+@router.post("/session/{session_id}/close")
+def close_session(
+    session_id: str,
+    db: Session = Depends(get_db),
+):
+
+    session = (
+        db.query(AttackSession)
+        .filter(
+            AttackSession.session_id
+            == session_id
+        )
+        .first()
+    )
+
+    if not session:
+        raise HTTPException(
+            status_code=404,
+            detail="Attack session not found",
+        )
+
+    if session.status != "completed":
+
+        session.status = "completed"
+
+        session.ended_at = (
+            datetime.now(timezone.utc)
+        )
+
+        db.commit()
+        db.refresh(session)
+
+    return {
+        "status": "closed",
+        "session_id": session.session_id,
+        "session_status": session.status,
+        "started_at": session.started_at,
+        "ended_at": session.ended_at,
     }
 
 
