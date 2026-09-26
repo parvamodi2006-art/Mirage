@@ -1,5 +1,11 @@
 # 🛡️ Mirage — Adaptive Defensive Honeypot
 
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-green)
+![React](https://img.shields.io/badge/React-Dashboard-61DAFB)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-Mapped-red)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
 **A controlled defensive honeypot for security research, attack behavior analysis, session intelligence, and MITRE ATT&CK mapping.**
 
 Mirage is a cybersecurity research project designed to simulate a controlled server environment and observe suspicious interaction patterns in an isolated lab.
