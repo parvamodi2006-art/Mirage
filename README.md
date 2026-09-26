@@ -14,7 +14,686 @@ It captures attacker-like activity, analyzes commands and behaviors, maps observ
 
 ---
 
+## 📸 Dashboard Prev# 🛡️ Mirage — Adaptive Defensive Honeypot
+
+
+![Python](https://img.shields.io/badge/Python-3.x-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-API-green)
+![React](https://img.shields.io/badge/React-Dashboard-61DAFB)
+![MITRE ATT&CK](https://img.shields.io/badge/MITRE%20ATT%26CK-Mapped-red)
+![License](https://img.shields.io/badge/License-MIT-yellow)
+
+
+\
+
+**A controlled defensive honeypot for security research, attack behavior analysis, session intelligence, and MITRE ATT&CK mapping.**
+
+Mirage is a cybersecurity research project that simulates a controlled server environment and captures attacker-like interactions for analysis.
+
+It records sessions and commands, classifies observed behavior, maps activity to MITRE ATT&CK techniques, calculates session-level risk, tracks attack progression, reconstructs attack timelines, and presents the resulting security intelligence through a React dashboard.
+
+> **Current scope:** Mirage is a controlled research/lab honeypot. Its current SSH-like service is a plain TCP line-based simulation and does not implement the real SSH protocol.
+
+---
+
+## 🌐 Live Demo
+
+### Dashboard
+
+**https://mirage-teal.vercel.app/**
+
+### Backend API
+
+**https://mirage-eapi.onrender.com/**
+
+### API Documentation
+
+**https://mirage-eapi.onrender.com/docs**
+
+The live demonstration uses a deployed FastAPI backend, PostgreSQL database, and React dashboard.
+
+---
+
 ## 📸 Dashboard Preview
+
+### Overview
+
+![Mirage Overview](screenshots/overview.png)
+
+### Session Intelligence
+
+![Mirage Session Intelligence](screenshots/session-intelligence.png)
+
+### Live Telemetry
+
+![Mirage Live Telemetry](screenshots/live-telemetry.png)
+
+### Attack Replay
+
+![Mirage Attack Replay](screenshots/attack-replay.png)
+
+---
+
+## ✨ Features
+
+* 🍯 Controlled TCP-based honeypot
+* 📡 Session and event telemetry
+* 🧠 Behavioral command analysis
+* 🎯 MITRE ATT&CK technique mapping
+* 📊 Session-level risk scoring
+* 🚨 Severity classification
+* 🧭 Attack progression tracking
+* ⏱️ Attack session replay
+* 🔎 Session intelligence
+* 🖥️ React security dashboard
+* 💾 Persistent event and session storage
+* 🗄️ PostgreSQL production database
+* 🧪 SQLite local development fallback
+* 🚀 Render backend deployment
+* ⚡ Vercel frontend deployment
+
+---
+
+## 🧠 Behavior Analysis
+
+Mirage analyzes observed commands and categorizes them into security-relevant behaviors.
+
+| Behavior                | Example           | Risk |
+| ----------------------- | ----------------- | ---: |
+| Authentication Activity | Login attempt     |   30 |
+| System Discovery        | `whoami`          |   60 |
+| Network Discovery       | `ifconfig`        |   60 |
+| File Discovery          | `ls`              |   50 |
+| Credential Access       | `cat /etc/passwd` |   80 |
+| Privilege Escalation    | `sudo -l`         |   80 |
+| Execution               | `bash`            |   60 |
+| Command Execution       | Unknown commands  |   40 |
+
+> Risk values are part of Mirage's current detection model. They are project-specific detection scores and do not represent a universal threat score.
+
+---
+
+## 🎯 MITRE ATT&CK Mapping
+
+Mirage maps detected behaviors to relevant MITRE ATT&CK techniques.
+
+| Behavior             | Technique                                    | Tactic               |
+| -------------------- | -------------------------------------------- | -------------------- |
+| System Discovery     | T1033 — System Owner/User Discovery          | Discovery            |
+| Network Discovery    | T1049 — System Network Connections Discovery | Discovery            |
+| File Discovery       | T1083 — File and Directory Discovery         | Discovery            |
+| Credential Access    | T1552 — Unsecured Credentials                | Credential Access    |
+| Privilege Escalation | T1548 — Abuse Elevation Control Mechanism    | Privilege Escalation |
+| Execution            | T1059 — Command and Scripting Interpreter    | Execution            |
+
+---
+
+## 📊 Session Intelligence
+
+Mirage combines individual event observations into session-level security intelligence.
+
+The risk engine considers:
+
+* Highest observed event risk
+* Average event risk
+* Behavioral diversity
+* High-risk activity
+* Critical activity
+
+### Example Production Demo Session
+
+```text
+Session Status     : COMPLETED
+Events             : 7
+Attack Stages      : 5
+MITRE Techniques   : 5
+Threat Level       : CRITICAL
+```
+
+The current demonstration attack progression is:
+
+```text
+Initial Access
+      ↓
+Discovery
+      ↓
+Credential Access
+      ↓
+Privilege Escalation
+      ↓
+Execution
+```
+
+---
+
+## 🧭 Attack Progression
+
+Mirage converts observed behavior into an ordered attack progression.
+
+```text
+Authentication Activity
+          ↓
+       Discovery
+          ↓
+   Credential Access
+          ↓
+  Privilege Escalation
+          ↓
+      Execution
+```
+
+This provides an analyst-oriented view of how activity develops during a session.
+
+---
+
+## ⏱️ Attack Replay
+
+Mirage reconstructs a session into a chronological replayable timeline.
+
+Each event can contain:
+
+* Event sequence
+* Timestamp
+* Relative time
+* Username
+* Command
+* Behavior category
+* Risk score
+* Severity
+* MITRE technique
+* MITRE tactic
+* Event description
+
+Example controlled session:
+
+```text
+Login Attempt
+      ↓
+whoami
+      ↓
+ifconfig
+      ↓
+cat /etc/passwd
+      ↓
+sudo -l
+      ↓
+bash
+```
+
+The dashboard converts this raw activity into structured security intelligence.
+
+---
+
+## 🔄 Security Telemetry Pipeline
+
+```text
+┌──────────────────────────┐
+│   Honeypot Interaction   │
+│       TCP :2222          │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│      Session Manager     │
+│  Login + Command Events  │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│        Telemetry         │
+│    Events + Sessions     │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│    Behavior Analysis     │
+│ Discovery / Credentials  │
+│ Privilege / Execution    │
+└────────────┬─────────────┘
+             │
+       ┌─────┴─────┐
+       ▼           ▼
+┌────────────┐ ┌────────────┐
+│   MITRE    │ │    Risk    │
+│   Mapper   │ │   Engine   │
+└─────┬──────┘ └─────┬──────┘
+      │              │
+      └──────┬───────┘
+             ▼
+┌──────────────────────────┐
+│   Session Intelligence   │
+│ Attack Progression +     │
+│ Attack Replay            │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│      FastAPI Backend     │
+└────────────┬─────────────┘
+             │
+             ▼
+┌──────────────────────────┐
+│     React Dashboard      │
+└──────────────────────────┘
+```
+
+---
+
+## 🏗️ Production Architecture
+
+```text
+                    ┌─────────────────────┐
+                    │       GitHub        │
+                    │   Mirage Repository │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │       Render        │
+                    │    FastAPI Backend  │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │  Render PostgreSQL  │
+                    │ Sessions + Events   │
+                    └──────────┬──────────┘
+                               │
+                    ┌──────────▼──────────┐
+                    │       Vercel        │
+                    │   React Dashboard   │
+                    └─────────────────────┘
+```
+
+### Local Development Architecture
+
+```text
+┌─────────────────────┐
+│   Mirage Honeypot   │
+│      TCP :2222      │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   FastAPI Backend   │
+│      :8000          │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│ SQLite Development  │
+│    Database         │
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
+│   React Dashboard   │
+│      :5173          │
+└─────────────────────┘
+```
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+
+* Python
+* FastAPI
+* Uvicorn
+* SQLAlchemy
+* psycopg
+* AsyncIO
+* Requests
+
+### Frontend
+
+* React
+* Vite
+* JavaScript
+* Lucide React
+
+### Database
+
+* PostgreSQL — production
+* SQLite — local development fallback
+
+### Security / Detection
+
+* Behavioral analysis
+* Risk scoring
+* Severity classification
+* MITRE ATT&CK mapping
+* Attack progression
+* Session intelligence
+* Attack replay
+
+### Deployment
+
+* GitHub
+* Render
+* Render PostgreSQL
+* Vercel
+
+---
+
+## 📁 Project Structure
+
+```text
+Mirage/
+│
+├── backend/
+│   ├── app/
+│   │   ├── attack/
+│   │   │   ├── attack_stage.py
+│   │   │   ├── mitre_mapper.py
+│   │   │   ├── replay.py
+│   │   │   └── risk_engine.py
+│   │   │
+│   │   ├── behavior/
+│   │   │   └── engine.py
+│   │   │
+│   │   ├── honeypot/
+│   │   │   ├── ssh_server.py
+│   │   │   └── telemetry_client.py
+│   │   │
+│   │   ├── telemetry/
+│   │   │   ├── database.py
+│   │   │   ├── db_models.py
+│   │   │   ├── routes.py
+│   │   │   └── session_models.py
+│   │   │
+│   │   └── main.py
+│   │
+│   ├── requirements.txt
+│   └── seed_demo.py
+│
+├── dashboard/
+│   ├── src/
+│   │   ├── App.jsx
+│   │   └── api.js
+│   ├── package.json
+│   └── ...
+│
+├── screenshots/
+│   ├── overview.png
+│   ├── session-intelligence.png
+│   ├── live-telemetry.png
+│   └── attack-replay.png
+│
+├── .gitignore
+├── LICENSE
+└── README.md
+```
+
+---
+
+## 🚀 Local Setup
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/parvamodi2006-art/Mirage.git
+cd Mirage
+```
+
+---
+
+### 2. Backend Setup
+
+Create a virtual environment:
+
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows:
+
+```cmd
+.venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+Start the FastAPI backend:
+
+```bash
+uvicorn backend.app.main:app --reload --port 8000
+```
+
+Backend:
+
+```text
+http://127.0.0.1:8000
+```
+
+Swagger API documentation:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+---
+
+### 3. Dashboard Setup
+
+Open another terminal:
+
+```cmd
+cd dashboard
+npm install
+npm run dev
+```
+
+Dashboard:
+
+```text
+http://localhost:5173
+```
+
+---
+
+### 4. Start the Honeypot
+
+From the project root:
+
+```cmd
+python -m backend.app.honeypot.ssh_server
+```
+
+The current controlled honeypot listens on:
+
+```text
+127.0.0.1:2222
+```
+
+---
+
+## 🍯 Honeypot
+
+The current Mirage honeypot provides a controlled TCP-based server simulation.
+
+It can capture:
+
+* Connection attempts
+* Authentication attempts
+* Usernames
+* Commands
+* Session lifecycle
+* Source IP
+* Service information
+
+The current implementation is **not a real SSH server**.
+
+It uses a plain TCP line-based interaction model designed for controlled security research and telemetry generation.
+
+---
+
+## 📡 API
+
+### Health
+
+```http
+GET /
+GET /health
+```
+
+### Sessions
+
+```http
+POST /api/telemetry/session
+
+GET /api/telemetry/sessions
+
+GET /api/telemetry/sessions/{session_id}
+
+POST /api/telemetry/session/{session_id}/close
+
+GET /api/telemetry/sessions/{session_id}/replay
+```
+
+### Events
+
+```http
+POST /api/telemetry/event
+
+GET /api/telemetry/events
+```
+
+Interactive API documentation is available through FastAPI Swagger:
+
+```text
+http://127.0.0.1:8000/docs
+```
+
+For the deployed API:
+
+```text
+https://mirage-eapi.onrender.com/docs
+```
+
+---
+
+## 🗄️ Database Configuration
+
+Mirage supports different database backends depending on the environment.
+
+### Local Development
+
+If `DATABASE_URL` is not configured, Mirage falls back to SQLite:
+
+```text
+backend/data/mirage.db
+```
+
+### Production
+
+The deployed backend uses PostgreSQL through the `DATABASE_URL` environment variable.
+
+This allows the same application code to operate with:
+
+```text
+Local       → SQLite
+Production  → PostgreSQL
+```
+
+---
+
+## 🔐 Security Considerations
+
+Mirage is intended for authorized security research, education, and controlled laboratory environments.
+
+When experimenting with the project:
+
+* Use an isolated VM, container, or dedicated lab environment.
+* Never expose real credentials.
+* Never connect simulated services to production systems.
+* Do not provide access to the real host filesystem.
+* Do not store real secrets inside the honeypot.
+* Monitor only systems and traffic you are authorized to test.
+* Keep the honeypot isolated from sensitive infrastructure.
+
+The current implementation should be treated as a **research/lab honeypot**, not as a production-grade internet-facing deception platform.
+
+---
+
+## 🗺️ Roadmap
+
+### Completed
+
+* [x] Honeypot listener
+* [x] Session tracking
+* [x] Event telemetry
+* [x] Behavioral analysis
+* [x] Risk scoring
+* [x] Severity classification
+* [x] MITRE ATT&CK mapping
+* [x] Attack progression
+* [x] Attack replay
+* [x] React security dashboard
+* [x] PostgreSQL production support
+* [x] Render backend deployment
+* [x] Vercel dashboard deployment
+* [x] Production telemetry demonstration
+
+### Planned
+
+* [ ] Adaptive deception
+* [ ] HTTP honeypot
+* [ ] Multi-session correlation
+* [ ] Fake credentials and files
+* [ ] Threat intelligence enrichment
+* [ ] Automated security reports
+* [ ] Attacker fingerprinting
+* [ ] Containerized deployment
+* [ ] Additional protocol simulations
+* [ ] Advanced deception profiles
+
+---
+
+## 👨‍💻 Author
+
+**Parva Modi**
+
+Cybersecurity Student / Trainee
+
+Focus areas:
+
+* Penetration Testing
+* VAPT
+* SOC Operations
+* Threat Detection
+* Security Engineering
+
+### Links
+
+* GitHub: https://github.com/parvamodi2006-art
+* LinkedIn: https://www.linkedin.com/in/parva-modi-314389358/
+
+---
+
+## ⚠️ Disclaimer
+
+Mirage is intended for authorized security research, cybersecurity education, and controlled laboratory environments only.
+
+Do not deploy or use the project against systems, networks, services, or infrastructure without proper authorization.
+
+The project is provided for defensive research and educational purposes.
+
+---
+
+## ⭐ Support
+
+If you find Mirage useful for learning, research, or security experimentation, consider giving the repository a ⭐.
+
+**Repository:**
+https://github.com/parvamodi2006-art/Mirage
+
+**Live Dashboard:**
+https://mirage-teal.vercel.app/
+iew
 
 ### Overview
 
