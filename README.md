@@ -11,7 +11,6 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 
 
-\
 
 **A controlled defensive honeypot for security research, attack behavior analysis, session intelligence, and MITRE ATT&CK mapping.**
 
