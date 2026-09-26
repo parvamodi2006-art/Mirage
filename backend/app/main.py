@@ -1,4 +1,3 @@
-```python
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -71,4 +70,3 @@ def health():
         "service": "mirage-api",
         "version": "0.1.0",
     }
-```
