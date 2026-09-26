@@ -47,11 +47,3 @@ export async function getSessionReplay(sessionId) {
 
   return response.json();
 }
-```
-
-Ab file save karke:
-
-```cmd
-git add dashboard/src/api.js
-git commit -m "Connect dashboard to deployed API"
-git push
