@@ -1,4 +1,4 @@
-const API_BASE = "http://127.0.0.1:8000";
+const API_BASE = "https://mirage-eapi.onrender.com";
 
 export async function getSessions() {
   const response = await fetch(
@@ -47,3 +47,11 @@ export async function getSessionReplay(sessionId) {
 
   return response.json();
 }
+```
+
+Ab file save karke:
+
+```cmd
+git add dashboard/src/api.js
+git commit -m "Connect dashboard to deployed API"
+git push
