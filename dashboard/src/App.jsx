@@ -1052,19 +1052,33 @@ function SessionDetailPage({
     details ??
     {};
 
+  /*
+   * Backend session detail response:
+   *
+   * {
+   *   session: {...},
+   *   intelligence: {
+   *     risk: {...},
+   *     attack_progression: [...]
+   *   },
+   *   timeline: [...]
+   * }
+   */
+
   const events = normalizeArray(
-    details?.events,
-    "events"
+    details?.timeline,
+    "timeline"
   );
 
   const risk =
-    details?.risk ??
+    details?.intelligence?.risk ??
     data?.risk ??
     {};
 
   const progression =
     normalizeArray(
-      details?.attack_progression,
+      details?.intelligence
+        ?.attack_progression,
       "attack_progression"
     );
 
@@ -1198,36 +1212,42 @@ function SessionDetailPage({
             description="Techniques mapped from observed behavior."
           />
 
-          <div className="space-y-3">
-            {mitreTechniques.map(
-              (technique) => (
-                <div
-                  key={
-                    technique.technique_id
-                  }
-                  className="rounded-lg border border-white/5 bg-white/[0.02] p-3"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <span className="font-mono text-xs font-semibold text-cyan-300">
-                      {
-                        technique.technique_id
-                      }
-                    </span>
-
-                    <span className="text-[10px] text-slate-600">
-                      {technique.tactic}
-                    </span>
-                  </div>
-
-                  <p className="mt-2 text-xs text-slate-300">
-                    {
-                      technique.technique_name
+          {mitreTechniques.length === 0 ? (
+            <p className="text-xs text-slate-600">
+              No MITRE techniques mapped.
+            </p>
+          ) : (
+            <div className="space-y-3">
+              {mitreTechniques.map(
+                (technique) => (
+                  <div
+                    key={
+                      technique.technique_id
                     }
-                  </p>
-                </div>
-              )
-            )}
-          </div>
+                    className="rounded-lg border border-white/5 bg-white/[0.02] p-3"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="font-mono text-xs font-semibold text-cyan-300">
+                        {
+                          technique.technique_id
+                        }
+                      </span>
+
+                      <span className="text-[10px] text-slate-600">
+                        {technique.tactic}
+                      </span>
+                    </div>
+
+                    <p className="mt-2 text-xs text-slate-300">
+                      {
+                        technique.technique_name
+                      }
+                    </p>
+                  </div>
+                )
+              )}
+            </div>
+          )}
         </div>
       </div>
 
@@ -1238,58 +1258,68 @@ function SessionDetailPage({
           </h3>
         </div>
 
-        <div className="divide-y divide-white/5">
-          {events.map((event) => {
-            const mitre =
-              getMitre(event);
+        {events.length === 0 ? (
+          <div className="px-5 py-8 text-center text-xs text-slate-600">
+            No session events available.
+          </div>
+        ) : (
+          <div className="divide-y divide-white/5">
+            {events.map((event, index) => {
+              const mitre =
+                getMitre(event);
 
-            const severity =
-              getSeverity(event);
+              const severity =
+                getSeverity(event);
 
-            return (
-              <div
-                key={event.id}
-                className="flex flex-col gap-3 px-5 py-4 md:flex-row md:items-center"
-              >
-                <div className="w-20 shrink-0 text-xs text-slate-600">
-                  {formatTime(
-                    event.timestamp
-                  )}
-                </div>
-
-                <div className="min-w-0 flex-1">
-                  <p className="font-mono text-xs text-white">
-                    {event.command ||
-                      event.event_type}
-                  </p>
-
-                  <p className="mt-1 text-[11px] text-slate-600">
-                    {event.behavior_category ||
-                      event.behavior ||
-                      "Unknown"}
-                  </p>
-                </div>
-
-                <Badge severity={severity}>
-                  {severity}
-                </Badge>
-
-                <span
-                  className={`text-sm font-semibold ${riskStyle(
-                    getRiskValue(event)
-                  )}`}
+              return (
+                <div
+                  key={
+                    event.event_id ??
+                    event.id ??
+                    index
+                  }
+                  className="flex flex-col gap-3 px-5 py-4 md:flex-row md:items-center"
                 >
-                  {getRiskValue(event)}
-                </span>
+                  <div className="w-20 shrink-0 text-xs text-slate-600">
+                    {formatTime(
+                      event.timestamp
+                    )}
+                  </div>
 
-                <span className="w-32 text-right font-mono text-[10px] text-cyan-400">
-                  {mitre?.technique_id ||
-                    "Not mapped"}
-                </span>
-              </div>
-            );
-          })}
-        </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="font-mono text-xs text-white">
+                      {event.command ||
+                        event.event_type}
+                    </p>
+
+                    <p className="mt-1 text-[11px] text-slate-600">
+                      {event.behavior_category ||
+                        event.behavior ||
+                        "Unknown"}
+                    </p>
+                  </div>
+
+                  <Badge severity={severity}>
+                    {severity}
+                  </Badge>
+
+                  <span
+                    className={`text-sm font-semibold ${riskStyle(
+                      getRiskValue(event)
+                    )}`}
+                  >
+                    {getRiskValue(event)}
+                  </span>
+
+                  <span className="w-32 text-right font-mono text-[10px] text-cyan-400">
+                    {mitre?.technique_id ||
+                      "Not mapped"}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
